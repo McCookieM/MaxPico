@@ -18,9 +18,9 @@ Raspberry Pi Pico/RP2040 - v2.2.2 - by Earle Philhower
 RPI_PICO_TimerInterrupt - v1.1.1 - by Khoi Hoang
 
 ### Set up board
-Change board to "Raspberry Pi Pico"
-Change "USB Stack" to "Adafruit TinyUSB"
-When uploading sketch, first unplug and re-plug the Pico with BOOTSEL held down (this puts in file mode)
+Change board to "Raspberry Pi Pico" and change "USB Stack" to "Adafruit TinyUSB".
+
+When uploading sketch, first unplug and re-plug the Pico with BOOTSEL held down (this puts in file mode) - COM port not required (except for debugging with serial monitor)
 
 ## Default GPIO pins (that cannot be changed in pinSetup.h)
 *OLED Display (on I2C1 - default I2C)*
