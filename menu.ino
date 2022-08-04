@@ -30,7 +30,7 @@ void menuMode()
 
 #include "buttons.h"
 
-#if defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+#if defined(__RASPBERRY_PI_PICO__)
 
   uint8_t EEPROM_get(uint16_t address, byte *data) {
     EEPROM.begin(1);
@@ -44,26 +44,7 @@ void menuMode()
       EEPROM.write(address, (uint16_t) data); 
       return true;    
   }
-  
-#elif defined(__arm__) && defined(__STM32F1__)
-
-  uint8_t EEPROM_get(uint16_t address, byte *data) {
-    if (EEPROM.init()==EEPROM_OK) {
-      *data = (byte)(EEPROM.read(address) & 0xff);  
-      return true;  
-    } else 
-      return false;
-  }
-  
-
-  uint8_t EEPROM_put(uint16_t address, byte data) {
-    if (EEPROM.init()==EEPROM_OK) {
-      EEPROM.write(address, (uint16_t) data); 
-      return true;    
-    } else
-      return false;
-  }
-  #endif
+#endif
 
 enum MenuItems{
   BAUD_RATE,
@@ -305,9 +286,7 @@ void doOnOffSubmenu(const char * title, byte& refVar)
   if(skip2A) settings |=32;
   #endif
 
-  #if defined(__AVR__)
-    EEPROM.put(EEPROM_CONFIG_BYTEPOS,settings);
-  #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+  #if defined(__RASPBERRY_PI_PICO__)
     EEPROM_put(EEPROM_CONFIG_BYTEPOS,settings);
   #endif      
   setBaud();
@@ -316,9 +295,7 @@ void doOnOffSubmenu(const char * title, byte& refVar)
  void loadEEPROM()
  {
   byte settings=0;
-  #if defined(__AVR__)
-    EEPROM.get(EEPROM_CONFIG_BYTEPOS,settings);
-  #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+  #if defined(__RASPBERRY_PI_PICO__)
     EEPROM_get(EEPROM_CONFIG_BYTEPOS,&settings);
   #endif
       

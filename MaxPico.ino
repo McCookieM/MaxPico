@@ -1,4 +1,4 @@
-#define VERSION "MaxPico v1.00"
+#define VERSION "MaxPico v1.01"
 // ---------------------------------------------------------------------------------
 // DO NOT USE CLASS-10 CARDS on this project - they're too fast to operate using SPI
 // ---------------------------------------------------------------------------------
@@ -163,18 +163,8 @@
   #define __RASPBERRY_PI_PICO__ true
 #endif
 
-#if defined(__AVR_ATmega2560__)
-  #include "userMAXconfig.h"
-#elif defined(__AVR_ATmega4809__) || defined(__AVR_ATmega4808__)
-  #include "userEVERYconfig.h"
-#elif defined(__arm__) && defined(__STM32F1__)
-  #include "userSTM32config.h"  
-#elif defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+#if defined(__RASPBERRY_PI_PICO__)
   #include "userPICOconfig.h"
-#elif defined(SEEED_XIAO_M0)
-  #include "userSEEEDUINO_XIAO_M0config.h"
-#else //__AVR_ATmega328P__
-  #include "userconfig.h"
 #endif
 
 #include "MaxPico.h"
@@ -1939,12 +1929,8 @@ void SetPlayBlock()
 //    count = 255;                                //End of file buffer flush
 //    EndOfFile=false;
 //    digitalWrite(outputPin, pinState);
-  #if defined(__AVR__) || defined(__SAMD21__)
-    Timer1.setPeriod(1000);                     //set 1ms wait at start of a file.
-  #elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+  #if defined(__RASPBERRY_PI_PICO__)
     timer.setPeriod(1000);
-  #elif  defined(__arm__) && defined(__STM32F1__)
-    timer.setSTM32Period(1000);
   #else
     #error unknown timer
   #endif
@@ -1968,10 +1954,7 @@ void GetAndPlayBlock()
       currentID=blockID[block%maxblock];   
    #endif
    #ifdef BLOCK_EEPROM_PUT
-      #if defined(__AVR__)
-        EEPROM.get(BLOCK_EEPROM_START+5*block, bytesRead);
-        EEPROM.get(BLOCK_EEPROM_START+4+5*block, currentID);
-      #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+      #if defined(__RASPBERRY_PI_PICO__)
         EEPROM_get(BLOCK_EEPROM_START+5*block, &bytesRead);
         EEPROM_get(BLOCK_EEPROM_START+4+5*block, &currentID);
       #endif      

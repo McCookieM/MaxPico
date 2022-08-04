@@ -547,9 +547,7 @@ static void init_OLED(void)
      SendByte(pgm_read_byte(logo+j*128+i));
    #endif
    #if defined(RECORD_EEPROM_LOGO) && not defined(EEPROM_LOGO_COMPRESS)
-     #if defined(__AVR__) 
-      EEPROM.put(j*128+i, pgm_read_byte(logo+j*128+i));
-     #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+     #if defined(__RASPBERRY_PI_PICO__)
       EEPROM_put(j*128+i, pgm_read_byte(logo+j*128+i));
      #endif      
    #endif
@@ -575,26 +573,20 @@ static void init_OLED(void)
                   nh |= (1 << nc);
                 }
               }
-              #if defined(__AVR__)             
-                EEPROM.put((j/2)*64+i/2,nl+nh*16);
-              #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+              #if defined(__RASPBERRY_PI_PICO__)
                 EEPROM_put((j/2)*64+i/2,nl+nh*16);
               #endif                          
             } 
 
         #else
-            #if defined(__AVR__)     
-              EEPROM.put(j*64+i/2, pgm_read_byte(logo+j*128+i));
-            #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+            #if defined(__RASPBERRY_PI_PICO__)
               EEPROM_put(j*64+i/2, pgm_read_byte(logo+j*128+i));
             #endif
         #endif
      }
    #endif   
    #if defined(LOAD_EEPROM_LOGO) && not defined(EEPROM_LOGO_COMPRESS)
-     #if defined(__AVR__)
-      EEPROM.get(j*128+i,hdrptr);
-     #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+     #if defined(__RASPBERRY_PI_PICO__)
       EEPROM_get(j*128+i,&hdrptr);
      #endif
      SendByte(hdrptr);
@@ -606,9 +598,7 @@ static void init_OLED(void)
               byte il=0;
               byte ril=0;
               byte ib=0;
-              #if defined(__AVR__)
-                EEPROM.get((j/2)*64+i/2,ril);
-              #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+              #if defined(__RASPBERRY_PI_PICO__))
                 EEPROM_get((j/2)*64+i/2,&ril);
               #endif
               for(ib=0;ib<4;ib++) {
@@ -624,9 +614,7 @@ static void init_OLED(void)
               byte ih=0;
               byte rih=0;
               byte ic=0;
-              #if defined(__AVR__) 
-                EEPROM.get((j/2)*64+i/2,rih);
-              #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+              #if defined(__RASPBERRY_PI_PICO__)
                 EEPROM_get((j/2)*64+i/2,&rih);
               #endif
               for(ic=4;ic<8;ic++) {
@@ -640,9 +628,7 @@ static void init_OLED(void)
               hdrptr = ih;                           
             }
         #else
-            #if defined(__AVR__)
-              EEPROM.get(j*64+i/2,hdrptr);
-            #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+            #if defined(__RASPBERRY_PI_PICO__)
               EEPROM_get(j*64+i/2,&hdrptr);
             #endif
         #endif

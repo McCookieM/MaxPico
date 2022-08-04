@@ -10,116 +10,18 @@
   #define I2CCLOCK  100000L   //100000L for StandarMode, 400000L for FastMode and 1000000L for FastModePlus
 #endif
 
-#if defined(__AVR_ATmega4809__) || defined (__AVR_ATmega4808__)
-  #ifdef Use_SoftI2CMaster
-    #undef Use_SoftI2CMaster
-    //#error This chip does not support SoftI2CMaster. Please undefine Use_SoftI2CMaster
-  #endif
-  #ifdef Use_SoftWire
-    #undef Use_SoftWire
-    //#error This chip does not support Softwire. Please undefine Use_SoftWire
-  #endif  
-  
-                          //
-                          // PATCH PROCERURE NEEDED FOR NANO EVERY AND THINARY TO SWAP TIMERS AND AVOID HANGING
-                          //
-                          // In C:\Users\Rafael\AppData\Local\Arduino15\packages\arduino\hardware\megaavr\1.8.4
-                          // change .\variants\nona4809\timers.h , .\variants\nona4809\variant.c , .\cores\arduino\wiring.c
-                          //
-                          // In C:\Users\Rafael\AppData\Local\Arduino15\packages\thinary\hardware\avr\1.0.0
-                          // change .\variants\nona4808\timers.h , .\variants\nona4808\variant.c , .\cores\arduino\wiring.c
-                          //
-                          // Needs 2 patches, check your version:
-                          //
-                          // SDFat 20150201 (old and very slow):
-                          // 1. In SdFatConfig.h change line 84 #define SD_SPI_CONFIGURATION 0
-                          //    with: #define SD_SPI_CONFIGURATION 1
-                          // 2. In SdSpi.h change line 292 #ifdef __AVR__
-                          //    with: #if defined(__AVR__) && not defined(__AVR_ATmega4809__)&& not defined(__AVR_ATmega4808__)
-                          //
-                          // SDFat 1.1.0 (faster and recommended):
-                          // 1. In SdFatConfig.h change line 216 #elif defined(__AVR__)\
-                          //    with: #elif defined(__AVR__) && not defined(__AVR_ATmega4809__)&& not defined(__AVR_ATmega4808__)\
-                          //
-                          // 2. In SpiDriver/SdSpiDriver.h change line 374 #ifdef __AVR__
-                          //    with: #if defined(__AVR__) && not defined(__AVR_ATmega4809__)&& not defined(__AVR_ATmega4808__)
-                         
-  //#define TimerOne 
-#elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
+#if defined(__RASPBERRY_PI_PICO__)
   #ifdef Use_SoftI2CMaster
     #undef Use_SoftI2CMaster
   #endif
   #ifdef Use_SoftWire
     #undef Use_SoftWire
   #endif
-     
-  //#define TimerOne  
-#elif defined(__SAMD21__)
-  #ifdef Use_SoftI2CMaster
-    #undef Use_SoftI2CMaster
-    //#error This chip does not support SoftI2CMaster. Please undefine Use_SoftI2CMaster
-  #endif
-  #ifdef Use_SoftWire
-    #undef Use_SoftWire
-    //#error This chip does not support Softwire. Please undefine Use_SoftWire
-  #endif  
-
-#elif defined(__AVR_ATmega32U4__)
-//#undef Use_SoftI2CMaster
-//#undef Use_SoftWire
-//#undef I2CFAST
-
-#else  //__AVR_ATmega328P__
-  //#define TimerOne
 #endif
 
-#ifdef TimerOne
-  #include <TimerOne.h>
-#elif defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+#if defined(__RASPBERRY_PI_PICO__)
   #include "TimerCounter.h"
   TimerCounter timer(2);
-
-#elif  defined(__arm__) && defined(__STM32F1__)
-  //HardwareTimer timer(2); // channel 2
-  #include "TimerCounter.h"
- 
-/* class TimerCounter: public HardwareTimer
-{
-  public:
-    TimerCounter(uint8 timerNum) : HardwareTimer(timerNum) {};
-    void setSTM32Period(unsigned long microseconds) __attribute__((always_inline)) {}
-};*/
-TimerCounter timer(2);
-  #include <itoa.h>  
-  #define strncpy_P(a, b, n) strncpy((a), (b), (n))
-  #define memcmp_P(a, b, n) memcmp((a), (b), (n)) 
-  #define strcasecmp_P(a,b) strcasecmp((a), (b)) 
-   
-#elif defined(__SAMD21__)
-  #include "TimerCounter.h"
-  TimerCounter Timer1;
-#else
-  #include "TimerCounter.h"
-  TimerCounter Timer1;              // preinstatiate
-  
-  unsigned short TimerCounter::pwmPeriod = 0;
-  unsigned char TimerCounter::clockSelectBits = 0;
-  void (*TimerCounter::isrCallback)() = NULL;
-  
-  // interrupt service routine that wraps a user defined function supplied by attachInterrupt
-  #if defined(__AVR_ATmega4809__) || defined (__AVR_ATmega4808__)
-    ISR(TCA0_OVF_vect)
-    {
-      Timer1.isrCallback();
-    /* The interrupt flag has to be cleared manually */
-    TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;
-    }  
-  #else //__AVR_ATmega328P__
-    ISR(TIMER1_OVF_vect)
-    {
-      Timer1.isrCallback();
-    }
-  #endif
 #endif
 
 
