@@ -9,7 +9,9 @@ void casStop()
 {
   #if defined(__AVR__) || defined(__SAMD21__)
     Timer1.stop();
-  #elif defined(__arm__) && defined(__STM32F1__)
+  #elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+    timer.pause();
+  #elif  defined(__arm__) && defined(__STM32F1__)
     timer.pause();
   #else
     #error unknown timer

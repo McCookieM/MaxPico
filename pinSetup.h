@@ -28,7 +28,20 @@
   //#define WRITE_HIGH            digitalWrite(outputPin,HIGH)
   #define WRITE_HIGH           VPORTA.OUT |=  PIN7_bm         // El pin9 es PA7
 
-#elif defined(__arm__) && defined(__STM32F1__)
+#elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+  #define outputPin           D9    // this pin is PWM output capable
+  #define INIT_OUTPORT            pinMode(outputPin,OUTPUT)
+  //gpio_set_function(outputPin, GPIO_FUNC_PWM)
+  
+  //#define INIT_OUTPORT            pinMode(outputPin,OUTPUT); GPIOA->regs->CRH |=  0x00000030  
+  #define WRITE_LOW               digitalWrite(outputPin,LOW)
+  //#define WRITE_LOW               GPIOA->regs->ODR &= ~0b0000001000000000
+  //#define WRITE_LOW               gpio_write_bit(GPIOA, 9, LOW)
+  #define WRITE_HIGH              digitalWrite(outputPin,HIGH)
+  //#define WRITE_HIGH              GPIOA->regs->ODR |=  0b0000001000000000
+  //#define WRITE_HIGH              gpio_write_bit(GPIOA, 9, HIGH)
+
+#elif  defined(__arm__) && defined(__STM32F1__)
   #define outputPin           PA9    // this pin is 5V tolerant and PWM output capable
   #define INIT_OUTPORT            pinMode(outputPin,OUTPUT)
   //#define INIT_OUTPORT            pinMode(outputPin,OUTPUT); GPIOA->regs->CRH |=  0x00000030  
@@ -107,7 +120,17 @@
   // #define btnDelete     A5         //Not implemented this button is for an optional function
   #define btnMotor      6             //Motor Sense (connect pin to gnd to play, NC for pause)
 
-#elif defined(__arm__) && defined(__STM32F1__)
+#elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+  #define chipSelect    D17            //Sd card chip select pin
+  
+  #define btnPlay       D7           //Play Button
+  #define btnStop       D6           //Stop Button
+  #define btnUp         D2           //Up button
+  #define btnDown       D3           //Down button
+  #define btnMotor      D9     //Motor Sense (connect pin to gnd to play, NC for pause)
+  #define btnRoot       D15           //Return to SD card root
+
+#elif  defined(__arm__) && defined(__STM32F1__)
 //
 // Pin definition for Blue Pill boards
 //
@@ -258,7 +281,7 @@
   PORTA.PIN5CTRL |=PORT_PULLUPEN_bm; /* Enable the internal pullup */
   VPORTA.OUT |=  PIN5_bm;
   
-#elif defined(__arm__) && defined(__STM32F1__)
+#elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
 
   //General Pin settings
   //Setup buttons with internal pullup 

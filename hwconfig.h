@@ -45,7 +45,7 @@
                           //    with: #if defined(__AVR__) && not defined(__AVR_ATmega4809__)&& not defined(__AVR_ATmega4808__)
                          
   //#define TimerOne 
-#elif defined(__arm__) && defined(__STM32F1__)
+#elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
   #ifdef Use_SoftI2CMaster
     #undef Use_SoftI2CMaster
   #endif
@@ -75,7 +75,11 @@
 
 #ifdef TimerOne
   #include <TimerOne.h>
-#elif defined(__arm__) && defined(__STM32F1__) 
+#elif defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+  #include "TimerCounter.h"
+  TimerCounter timer(2);
+
+#elif  defined(__arm__) && defined(__STM32F1__)
   //HardwareTimer timer(2); // channel 2
   #include "TimerCounter.h"
  
@@ -86,11 +90,11 @@
     void setSTM32Period(unsigned long microseconds) __attribute__((always_inline)) {}
 };*/
 TimerCounter timer(2);
-
   #include <itoa.h>  
   #define strncpy_P(a, b, n) strncpy((a), (b), (n))
   #define memcmp_P(a, b, n) memcmp((a), (b), (n)) 
   #define strcasecmp_P(a,b) strcasecmp((a), (b)) 
+   
 #elif defined(__SAMD21__)
   #include "TimerCounter.h"
   TimerCounter Timer1;

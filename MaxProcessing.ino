@@ -11,7 +11,7 @@ void UniPlay(){
   setBaud();
 //  #if defined(__AVR__) || defined(__SAMD21__)
 //    Timer1.stop();                              //Stop timer interrupt
-//  #elif defined(__arm__) && defined(__STM32F1__)
+//  #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
 //    timer.pause();
 //  #else
 //    #error unknown timer
@@ -63,7 +63,11 @@ void UniPlay(){
     #if defined(__AVR__) || defined(__SAMD21__)
       Timer1.initialize(1000);                //100ms pause prevents anything bad happening before we're ready
       Timer1.attachInterrupt(wave2);
-    #elif defined(__arm__) && defined(__STM32F1__)
+    #elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+      //timer.setCount(0);
+      timer.setTimer(100000, wave2);
+      //timer.resume();    
+    #elif  defined(__arm__) && defined(__STM32F1__)
       //timer.setCount(0);
       timer.setPeriod(1000);
       timer.attachInterrupt(2,wave2); // channel 2
@@ -82,9 +86,13 @@ void UniPlay(){
     #if defined(__AVR__) || defined(__SAMD21__)
       Timer1.initialize(period);
       Timer1.attachInterrupt(wave);
-    #elif defined(__arm__) && defined(__STM32F1__)
+    #elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
       //timer.setCount(0);
-      timer.setPeriod(period);
+      timer.setTimer(period, wave);
+      //timer.resume();   
+    #elif  defined(__arm__) && defined(__STM32F1__)
+      //timer.setCount(0);
+      timer.setSTM32Period(period);
       timer.attachInterrupt(2,wave); // channel 2
       timer.resume();   
     #else
@@ -106,7 +114,7 @@ void UniPlay(){
     #if defined(__AVR__) || defined(__SAMD21__)
       Timer1.initialize(1000);                //100ms pause prevents anything bad happening before we're ready
       Timer1.attachInterrupt(wave2);
-    #elif defined(__arm__) && defined(__STM32F1__)
+    #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
       //timer.setCount(0);
       timer.setPeriod(1000);
       timer.attachInterrupt(2,wave2); // channel 2
@@ -143,7 +151,9 @@ void UniPlay(char *filename) {
 void TZXStop() {
   #if defined(__AVR__) || defined(__SAMD21__)
     Timer1.stop();                              //Stop timer
-  #elif defined(__arm__) && defined(__STM32F1__)
+  #elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+    timer.pause();
+  #elif  defined(__arm__) && defined(__STM32F1__)
     timer.pause();
   #else
     #error unknown timer
@@ -532,7 +542,7 @@ void TZXProcess() {
                 #if defined(__AVR__)
                   EEPROM.put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM.put(BLOCK_EEPROM_START+4+5*block, currentID);
-                #elif defined(__arm__) && defined(__STM32F1__)
+                #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
                   EEPROM_put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM_put(BLOCK_EEPROM_START+4+5*block, currentID);
                 #endif                
@@ -621,7 +631,7 @@ void TZXProcess() {
                 #if defined(__AVR__)
                   EEPROM.put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM.put(BLOCK_EEPROM_START+4+5*block, currentID);
-                #elif defined(__arm__) && defined(__STM32F1__)
+                #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
                   EEPROM_put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM_put(BLOCK_EEPROM_START+4+5*block, currentID);
                 #endif                
@@ -852,7 +862,7 @@ void TZXProcess() {
                     #if defined(__AVR__)
                       EEPROM.put(BLOCK_EEPROM_START+5*block, bytesRead);
                       EEPROM.put(BLOCK_EEPROM_START+4+5*block, currentID);
-                    #elif defined(__arm__) && defined(__STM32F1__)
+                    #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
                       EEPROM_put(BLOCK_EEPROM_START+5*block, bytesRead);
                       EEPROM_put(BLOCK_EEPROM_START+4+5*block, currentID);
                     #endif                   
@@ -981,7 +991,7 @@ void TZXProcess() {
                 #if defined(__AVR__)
                   EEPROM.put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM.put(BLOCK_EEPROM_START+4+5*block, currentID);
-                #elif defined(__arm__) && defined(__STM32F1__)
+                #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
                   EEPROM_put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM_put(BLOCK_EEPROM_START+4+5*block, currentID); 
                 #endif                
@@ -1140,7 +1150,7 @@ void TZXProcess() {
                 #if defined(__AVR__)
                   EEPROM.put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM.put(BLOCK_EEPROM_START+4+5*block, currentID);
-                #elif defined(__arm__) && defined(__STM32F1__)
+                #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
                   EEPROM_put(BLOCK_EEPROM_START+5*block, bytesRead);
                   EEPROM_put(BLOCK_EEPROM_START+4+5*block, currentID);
                 #endif                 
@@ -1298,7 +1308,7 @@ void TZXProcess() {
                   #if defined(__AVR__)
                     EEPROM.put(BLOCK_EEPROM_START+5*block, bytesRead);
                     EEPROM.put(BLOCK_EEPROM_START+4+5*block, currentID);
-                  #elif defined(__arm__) && defined(__STM32F1__)
+                  #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
                     EEPROM_put(BLOCK_EEPROM_START+5*block, bytesRead);
                     EEPROM_put(BLOCK_EEPROM_START+4+5*block, currentID); 
                   #endif                 
@@ -1575,7 +1585,7 @@ void TZXProcess() {
                 #if defined(__AVR__) || defined(__SAMD21__)
                   currentPeriod = 32769;
                   //currentPeriod = 50;
-                #elif defined(__arm__) && defined(__STM32F1__)
+                #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
                   currentPeriod = 50;
                 #else
                   #error unknown timer
@@ -1606,7 +1616,7 @@ void TZXProcess() {
             bitSet(currentPeriod, 15);
             bitSet(currentPeriod, 13);
             
-          #elif defined(__arm__) && defined(__STM32F1__)
+          #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
             currentPeriod = 50;
           #else
             #error unknown timer
@@ -2513,7 +2523,11 @@ void wave2() {
   
   #if defined(__AVR__) || defined(__SAMD21__)
     Timer1.setPeriod(newTime +6);    //Finally set the next pulse length
-  #elif defined(__arm__) && defined(__STM32F1__)    
+  #elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+    //timer.setPeriod(newTime -4);
+    newTime += 2;
+    timer.setPeriod(newTime);
+  #elif  defined(__arm__) && defined(__STM32F1__)
     //timer.setPeriod(newTime -4);
     newTime += 2;
     //timer.setPeriod(newTime);    
@@ -2637,7 +2651,9 @@ void setBaud()
   //Timer1.setPeriod(period);
   #if defined(__AVR__) || defined(__SAMD21__)
     Timer1.stop();
-  #elif defined(__arm__) && defined(__STM32F1__)
+  #elif  defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+    timer.pause();
+  #elif  defined(__arm__) && defined(__STM32F1__)
     timer.pause();
   #else
     #error unknown timer
@@ -2799,7 +2815,7 @@ void DelayedStop() {
             //bitSet(currentPeriod, 12);
             bitSet(currentPeriod, 13);
             
-          #elif defined(__arm__) && defined(__STM32F1__)
+          #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
             currentPeriod = 50;
           #else
             #error unknown timer
@@ -2819,7 +2835,7 @@ void FlushBuffer(long newcount) {
     #if defined(__AVR__) || defined(__SAMD21__)
       currentPeriod = 32769;
       //currentPeriod = 32768 + 4096 + 10;
-    #elif defined(__arm__) && defined(__STM32F1__)
+    #elif  defined(__arm__) && (defined(__STM32F1__) || defined(__RASPBERRY_PI_PICO__))
       currentPeriod = 50;
     #else
       #error unknown timer
@@ -2851,4 +2867,3 @@ void ForcePauseAfter0() {
     forcePause0=0;
     return;  
 }
-

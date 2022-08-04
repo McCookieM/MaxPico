@@ -14,7 +14,41 @@
 // inlined by the compiler.  In the very common case with constant values
 // the compiler will perform all calculations and simply write constants
 // to the hardware registers (for example, setPeriod).
-#if  defined(__arm__) && defined(__STM32F1__)
+
+#if defined(__arm__) && defined(__RASPBERRY_PI_PICO__)
+  #include "RPi_Pico_TimerInterrupt.h"
+
+  class TimerCounter : public RPI_PICO_Timer
+  {
+    typedef void (*timerCallback) ();
+    
+    public:
+      TimerCounter(uint8_t numTimer) : RPI_PICO_Timer(numTimer) {};
+      
+      void setTimer(unsigned long microseconds, void (*callback)()) {
+        _callback = callback;
+        this->attachInterruptInterval(microseconds, (pico_timer_callback)_callback);
+      }
+
+      void setPeriod(unsigned long microseconds) __attribute__((always_inline)) {
+        setTimer(microseconds, _callback);
+      }
+
+      void pause() {
+        this->detachInterrupt();
+      }
+        
+      void resume() {
+        this->reattachInterrupt();
+      }
+
+    private:
+      timerCallback _callback = NULL;
+  };
+
+
+
+#elif  defined(__arm__) && defined(__STM32F1__)
 //clase derivada
 class TimerCounter:public HardwareTimer
 {
