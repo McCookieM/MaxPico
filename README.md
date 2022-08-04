@@ -40,7 +40,11 @@ When uploading sketch, first unplug and re-plug the Pico with BOOTSEL held down 
 * OLED 0.96" yellow/blue display (OLED_1306_128_64)
 * Menu system - including changing motor control and baud rate
 * File browsing
-* CDT files playing on real Amstrad CPC464 hardware - I am currently experiencing some noise issues which prevents custom loader games from working, which is probably just my hardware setup on a breadboard!
+* CDT files playing on real Amstrad CPC464 hardware - *I am currently experiencing some noise issues which prevents custom loader games from working, which is probably just my hardware setup on a breadboard!*
+* Pause / resume / change block
 
 ## What has NOT been tested?
-* Loads!
+* Other displays
+* EEPROM emulation
+* Other system testing (e.g. ZX Spectrum)
+* More....
