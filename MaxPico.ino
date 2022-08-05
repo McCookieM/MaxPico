@@ -276,11 +276,7 @@ void setup() {
 //    delay(1000);  //Needed!
     // Initialize I2C and OLED Display
       // I2C Init
-    #if defined(Use_SoftI2CMaster) 
-         i2c_init();
-    #else
         Wire.begin();
-    #endif    
     init_OLED();
     //delay(1500);              // Show logo
     //reset_display();           // Clear logo and load saved mode

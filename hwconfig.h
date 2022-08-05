@@ -1,32 +1,11 @@
-#define Use_SoftI2CMaster
-//#define Use_SoftWire
-#define I2CFAST
-
-#if defined(I2CFAST)
-  #define I2C_FASTMODE  1
-  #define I2CCLOCK  400000L   //100000L for StandarMode, 400000L for FastMode and 1000000L for FastModePlus
-#else
-  #define I2C_FASTMODE  0
-  #define I2CCLOCK  100000L   //100000L for StandarMode, 400000L for FastMode and 1000000L for FastModePlus
-#endif
-
-#if defined(__RASPBERRY_PI_PICO__)
-  #ifdef Use_SoftI2CMaster
-    #undef Use_SoftI2CMaster
-  #endif
-  #ifdef Use_SoftWire
-    #undef Use_SoftWire
-  #endif
-#endif
+#define I2CCLOCK  400000L   //100000L for StandarMode, 400000L for FastMode and 1000000L for FastModePlus
 
 #if defined(__RASPBERRY_PI_PICO__)
   #include "TimerCounter.h"
   TimerCounter timer(2);
 #endif
 
-
 #include <SdFat.h>
-
 
 #define scrollSpeed   250           //text scroll delay
 #define scrollWait    3000          //Delay before scrolling starts
@@ -40,48 +19,7 @@
   #define SCREENSIZE 16  
 
 #elif defined(OLED1306)
-  #if defined(Use_SoftI2CMaster) && defined(__AVR_ATmega2560__) 
-    #define SDA_PORT PORTD
-    #define SDA_PIN 1 
-    #define SCL_PORT PORTD
-    #define SCL_PIN 0 
-    #include <SoftI2CMaster.h>         
-  #elif defined(Use_SoftI2CMaster) && defined(__AVR_ATmega32U4__) 
-    #define SDA_PORT PORTD
-    #define SDA_PIN 1 
-    #define SCL_PORT PORTD
-    #define SCL_PIN 0 
-    #include <SoftI2CMaster.h> 
-  #elif defined(Use_SoftI2CMaster) 
-    #define SDA_PORT PORTC
-    #define SDA_PIN 4 
-    #define SCL_PORT PORTC
-    #define SCL_PIN 5 
-    #include <SoftI2CMaster.h>        
-  #elif defined(Use_SoftWire) && defined(__AVR_ATmega2560__) 
-    #define SDA_PORT PORTD
-    #define SDA_PIN 1 
-    #define SCL_PORT PORTD
-    #define SCL_PIN 0 
-    #include <SoftWire.h>
-    SoftWire Wire = SoftWire();
-   #elif defined(Use_SoftI2CMaster) && defined(__AVR_ATmega32U4__) 
-    #define SDA_PORT PORTD
-    #define SDA_PIN 1 
-    #define SCL_PORT PORTD
-    #define SCL_PIN 0 
-    #include <SoftWire.h>
-    SoftWire Wire = SoftWire();  
-  #elif defined(Use_SoftWire) 
-    #define SDA_PORT PORTC
-    #define SDA_PIN 4 
-    #define SCL_PORT PORTC
-    #define SCL_PIN 5 
-    #include <SoftWire.h>
-    SoftWire Wire = SoftWire();  
-  #else
     #include <Wire.h>
-  #endif
   //#include "U8glib.h"
   //U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE);  // I2C / TWI 
   //char line0[17];

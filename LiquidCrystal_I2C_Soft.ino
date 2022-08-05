@@ -3,20 +3,6 @@
 
 #include "LiquidCrystal_I2C_Soft.h"
 #include <inttypes.h>
-#if defined(ARDUINO) && ARDUINO >= 100
-
-#include "Arduino.h"
-#if defined(Use_SoftI2CMaster)
-  #define printIIC(args)  i2c_write(args)
-#else 
-  #define printIIC(args)	Wire.write(args)
-#endif
-inline size_t LiquidCrystal_I2C::write(uint8_t value) {
-	send(value, Rs);
-	return 1;
-}
-
-#else
 #include "WProgram.h"
 
 #define printIIC(args)	Wire.send(args)
@@ -24,50 +10,7 @@ inline void LiquidCrystal_I2C::write(uint8_t value) {
 	send(value, Rs);
 }
 
-#endif
-
-#if defined(Use_SoftI2CMaster) && defined(__AVR_ATmega2560__) 
-  #define SDA_PORT PORTD
-  #define SDA_PIN 1 
-  #define SCL_PORT PORTD
-  #define SCL_PIN 0 
-  #include <SoftI2CMaster.h>         
-#elif defined(Use_SoftI2CMaster) && defined(__AVR_ATmega32U4__) 
-  #define SDA_PORT PORTD
-  #define SDA_PIN 1 
-  #define SCL_PORT PORTD
-  #define SCL_PIN 0 
-  #include <SoftI2CMaster.h> 
-#elif defined(Use_SoftI2CMaster) 
-  #define SDA_PORT PORTC
-  #define SDA_PIN 4 
-  #define SCL_PORT PORTC
-  #define SCL_PIN 5 
-  #include <SoftI2CMaster.h>        
-#elif defined(Use_SoftWire) && defined(__AVR_ATmega2560__) 
-  #define SDA_PORT PORTD
-  #define SDA_PIN 1 
-  #define SCL_PORT PORTD
-  #define SCL_PIN 0 
-  #include <SoftWire.h>
-  SoftWire Wire = SoftWire();
- #elif defined(Use_SoftI2CMaster) && defined(__AVR_ATmega32U4__) 
-  #define SDA_PORT PORTD
-  #define SDA_PIN 1 
-  #define SCL_PORT PORTD
-  #define SCL_PIN 0 
-  #include <SoftWire.h>
-  SoftWire Wire = SoftWire();  
-#elif defined(Use_SoftWire) 
-  #define SDA_PORT PORTC
-  #define SDA_PIN 4 
-  #define SCL_PORT PORTC
-  #define SCL_PIN 5 
-  #include <SoftWire.h>
-  SoftWire Wire = SoftWire();  
-#else
   #include <Wire.h>
-#endif
 
 // When the display powers up, it is configured as follows:
 //
@@ -102,15 +45,9 @@ void LiquidCrystal_I2C::init(){
 
 void LiquidCrystal_I2C::init_priv()
 {
-  #if defined(Use_SoftI2CMaster)
-    i2c_init();
-    _displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
-    begin(_cols, _rows);  
-  #else   
   	Wire.begin();
   	_displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
   	begin(_cols, _rows);
-  #endif  
 }
 
 void LiquidCrystal_I2C::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
@@ -260,11 +197,7 @@ void LiquidCrystal_I2C::createChar(uint8_t location, uint8_t charmap[]) {
 	location &= 0x7; // we only have 8 locations 0-7
 	command(LCD_SETCGRAMADDR | (location << 3));
 	for (int i=0; i<8; i++) {
-    #if defined(Use_SoftI2CMaster)
-      i2c_write(charmap[i]);    
-    #else 
 		  write(charmap[i]);
-    #endif
 	}
 }
 
@@ -304,15 +237,9 @@ void LiquidCrystal_I2C::write4bits(uint8_t value) {
 }
 
 void LiquidCrystal_I2C::expanderWrite(uint8_t _data){                                        
-  #if defined(Use_SoftI2CMaster)
-    i2c_start((_Addr<<1)|I2C_WRITE);
-    printIIC((int)(_data) | _backlightval);
-    i2c_stop();  
-  #else 
   	Wire.beginTransmission(_Addr);
   	printIIC((int)(_data) | _backlightval);
   	Wire.endTransmission(); 
-  #endif  
 }
 
 void LiquidCrystal_I2C::pulseEnable(uint8_t _data){
