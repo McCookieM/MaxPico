@@ -123,6 +123,8 @@ byte lineaxy=2;
 
 #if defined(OLED1306_128_64) || defined(video64text32)
   //#define EmptyLogo               // to erase
+  //#define maxpicologo                 // new MaxPico logo by McCookieM
+  #define maxpicorasp               // new MaxPico logo with raspberry by McCookieM
   //#define Maxduino2Alf            // new Maxduino2 logo 128x64 by Alfredo Retrocant
   //#define CosmicCruiser             // Dragon32 CosmicCruiser by rcmolina
   //#define Batman
@@ -138,7 +140,7 @@ byte lineaxy=2;
   //#define Bentley
   //#define dragon
   //#define heckbert
-  #define cassette
+  //#define cassette
   //#define Audiocable
   //#define Digital
   //#define dragon32Max
@@ -179,7 +181,7 @@ byte lineaxy=2;
   //#define dostanques
   //#define cablemax
   //#define sony
-  //#define miniduino  
+  //#define miniduino
 #else
 //#define LOGOARDUITAPE            // original arduitape logo
 //#define LOGOMAXDUINO             // new logo created by Spirax

@@ -1,4 +1,4 @@
-#define VERSION "MaxPico v1.01"
+#define VERSION "MaxPico v1.02"
 // ---------------------------------------------------------------------------------
 // DO NOT USE CLASS-10 CARDS on this project - they're too fast to operate using SPI
 // ---------------------------------------------------------------------------------
@@ -152,12 +152,9 @@
  //
  //               v1.00 Initial release will be adding in Pico support using the board support from Earle F Philhower
  //                     https://github.com/earlephilhower/arduino-pico
- //
- //                     Add the board from the Arduino board manager - search for RP2040 or Pico and add "Raspberry Pi Pico/RP2040"
- //                     Tested with version 2.2.2 - any newer version may work but you may need to use 2.2.2 if you have problems
- //                     Change board to "Rapberry Pi Pico" and leave all other settings at default except for "USB Stack"
- //                     Change "USB Stack" to "Adafruit TinyUSB"
- //                     Select port as usual
+ //               v1.01 Remove all code for hardware except Raspberry Pi Pico
+ //               v1.02 Add new MaxPico logos
+
 
 #if defined(ARDUINO_ARDUINO_NANO33BLE) || defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   #define __RASPBERRY_PI_PICO__ true
