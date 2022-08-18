@@ -1,4 +1,4 @@
-#define VERSION "MaxPico v1.02"
+#define VERSION "MaxPico v1.03"
 // ---------------------------------------------------------------------------------
 // DO NOT USE CLASS-10 CARDS on this project - they're too fast to operate using SPI
 // ---------------------------------------------------------------------------------
@@ -154,6 +154,7 @@
  //                     https://github.com/earlephilhower/arduino-pico
  //               v1.01 Remove all code for hardware except Raspberry Pi Pico
  //               v1.02 Add new MaxPico logos
+ //               v1.03 Convert support for LCD16x2 (1602 display)
 
 
 #if defined(ARDUINO_ARDUINO_NANO33BLE) || defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
@@ -241,15 +242,14 @@ void setup() {
   #endif
 
   #ifdef LCDSCREEN16x2
-    lcd.init();                     //Initialise LCD (16x2 type)
-    //lcd.begin();                     //Initialise LCD (16x2 type)    
+    lcd.begin();                     //Initialise LCD (16x2 type)    
     lcd.backlight();
     lcd.clear();
     #if (SPLASH_SCREEN)
         lcd.setCursor(0,0);
         lcd.print(F("Welcome to")); // Set the text at the initilization for LCD Screen (Line 1)
         lcd.setCursor(0,1); 
-        lcd.print(F("Maxduino")); // Set the text at the initilization for LCD Screen (Line 2)
+        lcd.print(F("MaxPico")); // Set the text at the initilization for LCD Screen (Line 2)
     #endif   
 //    lcd.createChar(0, SpecialChar);
   #endif

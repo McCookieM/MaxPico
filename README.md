@@ -6,7 +6,9 @@
 **MaxPico is based on [MaxDuino](https://github.com/rcmolina/MaxDuino) and the [TzxDuino Reloaded](https://github.com/arananet/TzxDuino-Reloaded) project**
 
 * v1.00 Initial release will be adding in Pico support using the [Arduino Pico](https://github.com/earlephilhower/arduino-pico) board support from Earle F Philhower
-* v1.01 Remove all other hardware code leaving just Raspberry Pi Pico
+* v1.01 Remove all code for hardware except Raspberry Pi Pico
+* v1.02 Add new MaxPico logos
+* v1.03 Convert support for LCD16x2 (1602 display)
 
 ## How to setup Arduino IDE
 
@@ -16,6 +18,8 @@ Raspberry Pi Pico/RP2040 - v2.2.2 - by Earle Philhower
 
 #### Libraries
 RPI_PICO_TimerInterrupt - v1.1.1 - by Khoi Hoang
+LCD_I2C - v2.3.0 - by blackhack
+
 
 ### Set up board
 Change board to "Raspberry Pi Pico" and change "USB Stack" to "Adafruit TinyUSB".
@@ -23,7 +27,7 @@ Change board to "Raspberry Pi Pico" and change "USB Stack" to "Adafruit TinyUSB"
 When uploading sketch, first unplug and re-plug the Pico with BOOTSEL held down (this puts in file mode) - COM port not required (except for debugging with serial monitor)
 
 ## Default GPIO pins (that cannot be changed in pinSetup.h)
-*OLED Display (on I2C1 - default I2C)*
+*OLED Display / LCD 16x2 Display (on I2C1 - default I2C)*
 * GP4 - SDA
 * GP5 - SCL
 
@@ -38,13 +42,14 @@ When uploading sketch, first unplug and re-plug the Pico with BOOTSEL held down 
 * Fonts
 * SD card reading
 * OLED 0.96" yellow/blue display (OLED_1306_128_64)
+* LCD 16x2 (LCDSCREEN16x2)
 * Menu system - including changing motor control and baud rate
 * File browsing
 * CDT files playing on real Amstrad CPC464 hardware - *I am currently experiencing some noise issues which prevents custom loader games from working, which is probably just my hardware setup on a breadboard!*
 * Pause / resume / change block
 
 ## What has NOT been tested?
-* Other displays
+* Displays: 1.3" OLED and Nokia 5110 displays
 * EEPROM emulation
 * Other system testing (e.g. ZX Spectrum)
 * More....

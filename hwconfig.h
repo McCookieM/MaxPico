@@ -11,21 +11,17 @@
 #define scrollWait    3000          //Delay before scrolling starts
 
 #ifdef LCDSCREEN16x2
-  //#include <Wire.h>
-  #include "LiquidCrystal_I2C_Soft.h"
-  LiquidCrystal_I2C lcd(LCD_I2C_ADDR,16,2); // set the LCD address to 0x27 for a 16 chars and 2 line display
+  #include <LCD_I2C.h>
+  LCD_I2C lcd(LCD_I2C_ADDR,16,2); // set the LCD address to 0x27 for a 16 chars and 2 line display
   char indicators[] = {'|', '/', '-',0};
   uint8_t SpecialChar [8]= { 0x00, 0x10, 0x08, 0x04, 0x02, 0x01, 0x00, 0x00 };
   #define SCREENSIZE 16  
 
 #elif defined(OLED1306)
-    #include <Wire.h>
-  //#include "U8glib.h"
-  //U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE);  // I2C / TWI 
-  //char line0[17];
-  //char line1[17];
+  #include <Wire.h>
   char indicators[] = {'|', '/', '-',92};
   #define SCREENSIZE 16  
+  
 #elif defined(P8544)
   #include <pcd8544.h>
   #define ADMAX 1023
